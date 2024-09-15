@@ -1,0 +1,7 @@
+*~
+*.o
+*.BIN
+*.iso
+*.cue
+*.map
+dummy.txt
