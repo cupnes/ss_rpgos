@@ -27,7 +27,18 @@
 	and	#0xff, r0
 	or	r0, r15
 
+	# main関数呼び出し
+	mov.l	.L5, r1
+	jsr	@r1
+	nop
+
+	# main関数から戻ってきてしまったら無限ループで固める
 infinite_loop:
 	sleep
 	bra	infinite_loop
 	nop
+
+.L6:
+	.align 2
+.L5:
+	.long	_main
