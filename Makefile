@@ -6,9 +6,9 @@ LD = saturn-sh2-ld
 GCC = saturn-sh2-gcc
 EMU_YABAUSE = yabause -a -nb -i
 EMU_MEDNAFEN = mednafen -psx.dbg_level 0 -video.fs 0 -cheats 1
-CFLAGS = -Wall -Wextra -nostdinc -nostdlib -fno-builtin -fno-common
+CFLAGS = -Wall -Wextra -nostdinc -nostdlib -fno-builtin -fno-common -Iinclude
 LDFLAGS = -Map $(NAME).map -s -x -T $(NAME).ld
-OBJS = entry.o main.o
+OBJS = entry.o main.o vdp1.o common.o
 
 all: $(TARGETS)
 
