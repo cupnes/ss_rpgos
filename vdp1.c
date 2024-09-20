@@ -87,8 +87,7 @@ const struct vdp1_command_coordinates VDP1_COMMAND_LOCAL_COORDINATES = {
 const unsigned char SZ_VDP1_COMMAND_COORDINATES =
 	sizeof(struct vdp1_command_coordinates);
 
-/*
-VDP1 RAM
+/* VDP1 RAM
 - サイズ：4 Mbits = 512 KB = 524288 (0x0008 0000) bytes
 - 領域：0x05C0 0000 - 0x05C7 FFFF
 - メモリマップ：
@@ -97,8 +96,7 @@ VDP1 RAM
   |                 -> 0060 - 7FFF | - その他
   | 05C0 8000 - 05C7 EFFF (476 KB) | キャラクタパターンテーブル(CPT)
   |             -> 0 8000 - 7 EFFF | - その他
-  | 05C7 F000 - 05C7 FFFF (  4 KB) | カラールックアップテーブル(CLT)&グーローシェーディングテーブル
-*/
+  | 05C7 F000 - 05C7 FFFF (  4 KB) | カラールックアップテーブル(CLT)&グーローシェーディングテーブル */
 const unsigned int VRAM_CT_BASE = SS_VDP1_VRAM_ADDR;
 const unsigned int VRAM_CT_OTHER_BASE = SS_VDP1_VRAM_ADDR + 0x60;
 const unsigned int VRAM_CPT_BASE = SS_VDP1_VRAM_ADDR + 0x8000;
@@ -130,4 +128,24 @@ void setup_vram_command_table(void) {
 	/* コマンドテーブルのその他の1件目に描画終了コマンドを配置 */
 	com_adr = (unsigned short *)VRAM_CT_OTHER_BASE;
 	*com_adr = VDP1_CMD_DRAWING_END;
+}
+
+/* カラールックアップテーブル設定 */
+void setup_vram_color_lookup_table(void) {
+	/* 配置先アドレスを変数へ設定 */
+	unsigned short *p = (unsigned short *)VRAM_CLT_BASE;
+
+	/* | 0 | 透明 | 0x0000 |
+	   | 1 | 白   | 0xffff |
+	   | 2 | 透明 | 0x0000 |
+	   | : |  :   |   :    |
+	   | f | 透明 | 0x0000 | */
+	unsigned char i;
+	for (i = 0; i <= 15; i++) {
+		if (i == 1) {
+			*p++ = 0xffff;
+		} else {
+			*p++ = 0x0000;
+		}
+	}
 }
