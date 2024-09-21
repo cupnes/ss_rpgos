@@ -8,6 +8,13 @@
 
 #define VDP1_CMD_DRAWING_END	0x8000
 
+#define VDP1_TVMR	*(unsigned short *)0x25d00000
+#define VDP1_FBCR	*(unsigned short *)0x25d00002
+#define VDP1_PTMR	*(unsigned short *)0x25d00004
+#define VDP1_EWDR	*(unsigned short *)0x25d00006
+#define VDP1_EWLR	*(unsigned short *)0x25d00008
+#define VDP1_EWRR	*(unsigned short *)0x25d0000a
+
 struct vdp1_command_coordinates {
 	unsigned short cmdctrl;
 	unsigned short cmdlink;
@@ -148,4 +155,30 @@ void setup_vram_color_lookup_table(void) {
 			*p++ = 0x0000;
 		}
 	}
+}
+
+/* VDP1の初期化 */
+void vdp1_init(void) {
+	/* VDP1のシステムレジスタ設定 */
+
+	/* TVMR
+	   - VBE(b3) = 0
+	   - TVM(b2-b0) = 0b000 */
+	VDP1_TVMR = 0x0000;
+
+	/* FBCR */
+	VDP1_FBCR = 0x0000;
+
+	/* PTMR
+	   - PTM(b1-b0) = 0b10 */
+	VDP1_PTMR = 0x0002;
+
+	/* EWDR */
+	VDP1_EWDR = 0x8000;
+
+	/* EWLR */
+	VDP1_EWLR = 0x0000;
+
+	/* EWRR */
+	VDP1_EWRR = 0x50df;
 }
