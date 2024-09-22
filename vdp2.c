@@ -13,8 +13,8 @@ void vdp2_init(void) {
 	   - BDCLMD(b8) = 1 (Border Color Mode = Back screen)
 	   - LSMD(b7-b6) = 0b00 (Interlace Mode = Non-Interlace)
 	   - VRESO(b5-b4) = 0b00 (Vertical resolution = 224)
-	   - HRESO(b2-b0) = 0b000 (Horizontal resolution = 320) */
-	VDP2_TVMD = 0x8100;
+	   - HRESO(b2-b0) = 0b010 (Horizontal resolution = 640) */
+	VDP2_TVMD = 0x8102;
 
 	/* BGON
 	   - Transparent enable = all enable

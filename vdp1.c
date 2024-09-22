@@ -35,7 +35,15 @@ struct vdp1_command_coordinates {
 };
 
 const struct vdp1_command_coordinates VDP1_COMMAND_SYSTEM_CLIPPING_COORDINATES = {
+	/* CMDCTRL
+	   - JP(b14-b12) = 0b000 (jump next)
+	   - b3 = 1
+	   - b0 = 1 */
 	0x0009,
+
+	/* CMDLINK (JP = jump nextなので無視される) */
+	0x0000,
+
 	0x0000,
 	0x0000,
 	0x0000,
@@ -44,36 +52,89 @@ const struct vdp1_command_coordinates VDP1_COMMAND_SYSTEM_CLIPPING_COORDINATES =
 	0x0000,
 	0x0000,
 	0x0000,
-	0x0000,
-	0x013f,
+
+	/* CMDXC
+	   - 右下X座標(b9-b0) = 0x27f (639) */
+	0x027f,
+
+	/* CMDYC
+	   - 右下Y座標(b8-b0) = 0x0df (223) */
 	0x00df,
+
 	0x0000,
 	0x0000,
 	0x0000,
+
+	/* dummy */
 	0x0000
 };
 
 const struct vdp1_command_coordinates VDP1_COMMAND_USER_CLIPPING_COORDINATES = {
+	/* CMDCTRL
+	   - JP(b14-b12) = 0b000 (jump next)
+	   - b3 = 1 */
 	0x0008,
+
+	/* CMDLINK (JP = jump nextなので無視される) */
+	0x0000,
+
 	0x0000,
 	0x0000,
 	0x0000,
 	0x0000,
+
+	/* CMDXA
+	   - 左上X座標(b9-b0) = 0x000 */
+	0x0000,
+
+	/* CMDYA
+	   - 左上Y座標(b8-b0) = 0x000 */
+	0x0000,
+
 	0x0000,
 	0x0000,
-	0x0000,
-	0x0000,
-	0x0000,
-	0x013f,
+
+	/* CMDXC
+	   - 右下X座標(b9-b0) = 0x27f (639) */
+	0x027f,
+
+	/* CMDYC
+	   - 右下Y座標(b8-b0) = 0x0df (223) */
 	0x00df,
+
 	0x0000,
 	0x0000,
 	0x0000,
+
+	/* dummy */
 	0x0000
 };
 
 const struct vdp1_command_coordinates VDP1_COMMAND_LOCAL_COORDINATES = {
+	/* CMDCTRL
+	   - JP(b14-b12) = 0b000 (jump next)
+	   - b3 = 1
+	   - b1 = 1 */
 	0x000a,
+
+	/* CMDLINK (JP = jump nextなので無視される) */
+	0x0000,
+
+	0x0000,
+	0x0000,
+	0x0000,
+	0x0000,
+
+	/* CMDXA
+	   - 符号拡張(b15-b11) = 0x00
+	   - 相対X座標(b10-b0) = 0x000 */
+	0x0000,
+
+	/* CMDYA
+	   - 符号拡張(b15-b11) = 0x00
+	   - 相対Y座標(b10-b0) = 0x000 */
+	0x0000,
+
 	0x0000,
 	0x0000,
 	0x0000,
@@ -81,13 +142,8 @@ const struct vdp1_command_coordinates VDP1_COMMAND_LOCAL_COORDINATES = {
 	0x0000,
 	0x0000,
 	0x0000,
-	0x0000,
-	0x0000,
-	0x0000,
-	0x0000,
-	0x0000,
-	0x0000,
-	0x0000,
+
+	/* dummy */
 	0x0000
 };
 
@@ -163,8 +219,8 @@ void vdp1_init(void) {
 
 	/* TVMR
 	   - VBE(b3) = 0
-	   - TVM(b2-b0) = 0b000 */
-	VDP1_TVMR = 0x0000;
+	   - TVM(b2-b0) = 0b001 (ハイレゾ) */
+	VDP1_TVMR = 0x0001;
 
 	/* FBCR */
 	VDP1_FBCR = 0x0000;
@@ -174,11 +230,13 @@ void vdp1_init(void) {
 	VDP1_PTMR = 0x0002;
 
 	/* EWDR */
-	VDP1_EWDR = 0x8000;
+	VDP1_EWDR = 0x0000;
 
 	/* EWLR */
 	VDP1_EWLR = 0x0000;
 
-	/* EWRR */
+	/* EWRR
+	   - 右下X座標(b15-b9) = 0b010 1000 (0x28 * 16 - 1 = 639)
+	   - 右下Y座標(b8-b0) = 0b0 1101 1111 (0x0df = 223) */
 	VDP1_EWRR = 0x50df;
 }
